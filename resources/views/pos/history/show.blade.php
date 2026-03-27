@@ -11,9 +11,14 @@
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Invoice</p>
           <p class="text-lg font-bold text-slate-900">{{ $order->invoice_no }}</p>
         </div>
-        <a href="{{ route('pos.transactions.index') }}" class="inline-flex items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700">
-          Kembali
-        </a>
+        <div class="flex items-center gap-2">
+          <a href="{{ route('pos.transactions.receipt', $order) }}" target="_blank" class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+            Cetak Struk
+          </a>
+          <a href="{{ route('pos.transactions.index') }}" class="inline-flex items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700">
+            Kembali
+          </a>
+        </div>
       </div>
 
       <div class="mt-4 grid gap-4 sm:grid-cols-3">

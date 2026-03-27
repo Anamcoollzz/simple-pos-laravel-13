@@ -110,9 +110,10 @@ class PosController extends Controller
         }
 
         $invoiceNo = null;
+        $orderId = null;
 
         try {
-            DB::transaction(function () use ($cart, &$invoiceNo) {
+            DB::transaction(function () use ($cart, &$invoiceNo, &$orderId) {
                 $products = Product::whereIn('id', array_keys($cart))
                     ->lockForUpdate()
                     ->get()
@@ -140,6 +141,7 @@ class PosController extends Controller
                 ]);
 
                 $invoiceNo = $order->invoice_no;
+                $orderId = $order->id;
 
                 foreach ($cart as $productId => $qty) {
                     $product = $products->get((int) $productId);
@@ -166,12 +168,18 @@ class PosController extends Controller
         session()->forget('pos_cart');
 
         $successMessage = 'Checkout berhasil. Transaksi tersimpan dengan nomor ' . $invoiceNo . '.';
+        $receiptUrl = route('pos.transactions.receipt', $orderId);
 
         if ($this->isAjax($request)) {
-            return $this->jsonResponse('success', $successMessage);
+            return $this->jsonResponse('success', $successMessage, 200, [
+                'receipt_url' => $receiptUrl,
+            ]);
         }
 
-        return redirect()->route('pos.index')->with('success', $successMessage);
+        return redirect()
+            ->route('pos.index')
+            ->with('success', $successMessage)
+            ->with('receipt_url', $receiptUrl);
     }
 
     private function isAjax(Request $request): bool
@@ -179,15 +187,15 @@ class PosController extends Controller
         return $request->expectsJson() || $request->ajax();
     }
 
-    private function jsonResponse(string $type, string $message, int $status = 200): JsonResponse
+    private function jsonResponse(string $type, string $message, int $status = 200, array $extra = []): JsonResponse
     {
         [$cartItems, $total] = $this->buildCartItems();
 
-        return response()->json([
+        return response()->json(array_merge([
             'status' => $type,
             'message' => $message,
             'cart_html' => view('pos._cart', compact('cartItems', 'total'))->render(),
-        ], $status);
+        ], $extra), $status);
     }
 
     /**

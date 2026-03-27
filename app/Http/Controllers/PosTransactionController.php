@@ -20,4 +20,11 @@ class PosTransactionController extends Controller
 
         return view('pos.history.show', compact('order'));
     }
+
+    public function receipt(PosOrder $order): View
+    {
+        $order->load('items');
+
+        return view('pos.history.receipt', compact('order'));
+    }
 }

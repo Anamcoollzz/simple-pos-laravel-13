@@ -10,6 +10,11 @@
     @if (session('success'))
       <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
         {{ session('success') }}
+        @if (session('receipt_url'))
+          <a href="{{ session('receipt_url') }}" target="_blank" class="ml-2 font-semibold underline">
+            Cetak struk
+          </a>
+        @endif
       </div>
     @endif
 
@@ -90,7 +95,7 @@
       const alertBox = document.getElementById('pos-alert');
       const cartPanel = document.getElementById('pos-cart-panel');
 
-      const showAlert = (type, message) => {
+      const showAlert = (type, message, receiptUrl = null) => {
         alertBox.classList.remove('hidden', 'border-emerald-200', 'bg-emerald-50', 'text-emerald-700', 'border-rose-200', 'bg-rose-50', 'text-rose-700');
 
         if (type === 'success') {
@@ -100,6 +105,15 @@
         }
 
         alertBox.textContent = message;
+
+        if (receiptUrl) {
+          const link = document.createElement('a');
+          link.href = receiptUrl;
+          link.target = '_blank';
+          link.className = 'ml-2 font-semibold underline';
+          link.textContent = 'Cetak struk';
+          alertBox.appendChild(link);
+        }
       };
 
       const submitAjax = async (form) => {
@@ -124,9 +138,11 @@
           cartPanel.innerHTML = data.cart_html;
         }
 
-        showAlert(data.status || 'success', data.message || 'Berhasil.');
+        showAlert(data.status || 'success', data.message || 'Berhasil.', data.receipt_url || null);
 
-        if (form.action.includes('/checkout')) {
+        if (form.action.includes('/checkout') && data.receipt_url) {
+          window.open(data.receipt_url, '_blank');
+
           setTimeout(() => {
             window.location.reload();
           }, 500);

@@ -31,7 +31,10 @@
               <td class="border-b border-slate-100 px-4 py-3">{{ $order->total_items }}</td>
               <td class="border-b border-slate-100 px-4 py-3 font-semibold text-slate-900">Rp {{ number_format($order->total_amount, 2, ',', '.') }}</td>
               <td class="border-b border-slate-100 px-4 py-3">
-                <a href="{{ route('pos.transactions.show', $order) }}" class="font-medium text-cyan-700 hover:text-cyan-800">Detail</a>
+                <div class="flex items-center gap-3">
+                  <a href="{{ route('pos.transactions.show', $order) }}" class="font-medium text-cyan-700 hover:text-cyan-800">Detail</a>
+                  <a href="{{ route('pos.transactions.receipt', $order) }}" target="_blank" class="font-medium text-slate-700 hover:text-slate-900">Cetak</a>
+                </div>
               </td>
             </tr>
           @empty
