@@ -52,7 +52,8 @@
       <button onclick="window.print()" class="inline-flex flex-1 items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
         Cetak Struk
       </button>
-      <a href="{{ route('pos.transactions.show', $order) }}" class="inline-flex flex-1 items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-400 hover:text-cyan-700">
+      <a href="{{ route('pos.transactions.show', $order) }}"
+        class="inline-flex flex-1 items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-cyan-400 hover:text-cyan-700">
         Kembali
       </a>
     </div>

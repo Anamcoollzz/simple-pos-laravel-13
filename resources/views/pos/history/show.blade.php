@@ -15,7 +15,8 @@
           <a href="{{ route('pos.transactions.receipt', $order) }}" target="_blank" class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
             Cetak Struk
           </a>
-          <a href="{{ route('pos.transactions.index') }}" class="inline-flex items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700">
+          <a href="{{ route('pos.transactions.index') }}"
+            class="inline-flex items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700">
             Kembali
           </a>
         </div>
