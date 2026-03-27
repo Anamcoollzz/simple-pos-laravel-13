@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -28,11 +29,18 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        unset($validated['image']);
 
         Product::create($validated);
 
@@ -57,11 +65,22 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+
+            $validated['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        unset($validated['image']);
 
         $product->update($validated);
 
@@ -72,6 +91,10 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
+        if ($product->image_path) {
+            Storage::disk('public')->delete($product->image_path);
+        }
+
         $product->delete();
 
         return redirect()

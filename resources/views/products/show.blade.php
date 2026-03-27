@@ -6,6 +6,19 @@
 @section('content')
   <div class="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
     <div class="grid gap-4 sm:grid-cols-2">
+      <div class="rounded-xl bg-slate-50 p-4 sm:col-span-2">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Gambar Produk</p>
+        <div class="mt-2">
+          @if ($product->image_path)
+            <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="h-56 w-full rounded-lg object-cover sm:w-72">
+          @else
+            <div class="flex h-40 w-full items-center justify-center rounded-lg border border-dashed border-slate-300 bg-white text-sm text-slate-500 sm:w-72">
+              Tidak ada gambar
+            </div>
+          @endif
+        </div>
+      </div>
+
       <div class="rounded-xl bg-slate-50 p-4">
         <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Kategori</p>
         <p class="mt-1 text-sm font-semibold text-slate-900">{{ $product->category?->name ?: '-' }}</p>

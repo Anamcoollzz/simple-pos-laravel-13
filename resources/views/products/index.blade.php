@@ -22,6 +22,7 @@
       <table class="min-w-full border-separate border-spacing-0 text-sm">
         <thead>
           <tr>
+            <th class="border-b border-slate-200 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-700">Gambar</th>
             <th class="border-b border-slate-200 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-700">Nama</th>
             <th class="border-b border-slate-200 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-700">Kategori</th>
             <th class="border-b border-slate-200 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-700">Harga</th>
@@ -32,6 +33,13 @@
         <tbody>
           @forelse ($products as $product)
             <tr class="hover:bg-slate-50/70">
+              <td class="border-b border-slate-100 px-4 py-3">
+                @if ($product->image_path)
+                  <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="h-12 w-12 rounded-md object-cover">
+                @else
+                  <div class="h-12 w-12 rounded-md border border-dashed border-slate-300 bg-slate-50"></div>
+                @endif
+              </td>
               <td class="border-b border-slate-100 px-4 py-3 font-medium text-slate-900">{{ $product->name }}</td>
               <td class="border-b border-slate-100 px-4 py-3 text-slate-600">{{ $product->category?->name ?: '-' }}</td>
               <td class="border-b border-slate-100 px-4 py-3">Rp {{ number_format($product->price, 2, ',', '.') }}</td>
@@ -50,7 +58,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="5" class="px-4 py-8 text-center text-slate-500">Belum ada data produk.</td>
+              <td colspan="6" class="px-4 py-8 text-center text-slate-500">Belum ada data produk.</td>
             </tr>
           @endforelse
         </tbody>
