@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductController;
 use App\Models\Category;
 use App\Models\Product;
@@ -21,3 +22,11 @@ Route::get('/dashboard', function () {
 
 Route::resource('products', ProductController::class);
 Route::resource('categories', CategoryController::class);
+
+Route::prefix('pos')->name('pos.')->group(function () {
+    Route::get('/', [PosController::class, 'index'])->name('index');
+    Route::post('/add', [PosController::class, 'add'])->name('add');
+    Route::patch('/update/{product}', [PosController::class, 'update'])->name('update');
+    Route::delete('/remove/{product}', [PosController::class, 'remove'])->name('remove');
+    Route::post('/checkout', [PosController::class, 'checkout'])->name('checkout');
+});
